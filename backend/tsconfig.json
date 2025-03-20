@@ -12,7 +12,9 @@
     "noImplicitAny": true,          // Disallow implicit 'any' types for better type safety
     "incremental": true,            // Enable incremental compilation for faster builds
     "resolveJsonModule": true,      // Allow importing JSON files as modules
-    "skipLibCheck": true            // Skip type checking of declaration files for faster compilation
+    "skipLibCheck": true,           // Skip type checking of declaration files for faster compilation
+    "experimentalDecorators": true, // Enable experimental support for decorators
+    "emitDecoratorMetadata": true   // Emit design-type metadata for decorated declarations
   },
   "include": ["src"],               // Compile all files in the 'src' directory
   "exclude": ["node_modules"]       // Exclude 'node_modules' from compilation

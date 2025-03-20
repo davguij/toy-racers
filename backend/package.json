@@ -12,13 +12,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@colyseus/schema": "^3.0.24",
+    "@toy-racers/shared": "workspace:*",
     "cannon-es": "^0.20.0",
     "colyseus": "^0.16.3",
     "express": "^4.21.2"
   },
   "devDependencies": {
-    "@types/node": "^22.13.10",
     "@types/express": "^4.17.21",
+    "@types/node": "^22.13.10",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
