@@ -6,9 +6,6 @@ const TRACK_WIDTH = 0.3; // Wider track for better stability
 const TRACK_SLOPE = Math.atan(0.3); // Increased to ~16.7 degrees - steeper slope to provide enough gravity force
 const NUM_CHECKPOINTS = 2; // Start and finish line
 
-// Debug configuration flag
-const DEBUG_PHYSICS = true;
-
 console.log('🏎️ Track dimensions:', {
   length: TRACK_LENGTH,
   width: TRACK_WIDTH,
@@ -38,24 +35,7 @@ export class PhysicsWorld {
   constructor() {
     // Create physics world with realistic gravity for toy cars
     this.world = new CANNON.World();
-
-    // Set gravity along direction of the track for better downhill movement
-    // This creates a gravity component along the track direction
-    const gravityStrength = 9.82 * 1.5; // Enhanced gravity for better movement
-    const gravityX = Math.sin(TRACK_SLOPE) * gravityStrength; // Gravity component along track (X-axis)
-    const gravityY = -Math.cos(TRACK_SLOPE) * gravityStrength; // Gravity component perpendicular to track (Y-axis)
-
-    this.world.gravity.set(gravityX, gravityY, 0);
-
-    if (DEBUG_PHYSICS) {
-      console.log('🌍 Gravity components:', {
-        x: gravityX,
-        y: gravityY,
-        strength: gravityStrength,
-        explanation:
-          'Gravity is aligned with track slope for better downhill movement',
-      });
-    }
+    this.world.gravity.set(0, -9.82, 0); // Example gravity setup
 
     // Create materials with better traction
     const defaultMaterial = new CANNON.Material('default');
@@ -63,12 +43,12 @@ export class PhysicsWorld {
       defaultMaterial,
       defaultMaterial,
       {
-        friction: 0.1, // Very low friction to allow gravity to move cars easily
-        restitution: 0.01, // Almost no bounce to prevent cars from jumping
-        contactEquationStiffness: 1e6, // Lower stiffness for smoother contacts
-        contactEquationRelaxation: 5, // Higher relaxation for better stability
-        frictionEquationStiffness: 1e6, // Lower stiffness for smoother friction
-        frictionEquationRelaxation: 5, // Higher relaxation for better stability
+        friction: 0.1,
+        restitution: 0.01,
+        contactEquationStiffness: 1e8, // Increase from default (e.g., 1e6)
+        contactEquationRelaxation: 5,
+        frictionEquationStiffness: 1e8, // Increase from default
+        frictionEquationRelaxation: 5,
       },
     );
 
@@ -108,6 +88,19 @@ export class PhysicsWorld {
     this.track = this.createTrack(plasticMaterial);
     this.world.addBody(this.track);
     this.createCheckpoints();
+
+    // Add collision debugging
+    this.world.addEventListener(
+      'beginContact',
+      (event: {
+        bodyA: { id: string };
+        bodyB: { id: string };
+      }) => {
+        console.log(
+          `Collision between body ${event.bodyA.id} and ${event.bodyB.id}`,
+        );
+      },
+    );
   }
 
   /**
@@ -117,11 +110,11 @@ export class PhysicsWorld {
     const trackBody = new CANNON.Body({
       mass: 0,
       type: CANNON.Body.STATIC,
-      material: material,
+      material: this.materials.default,
     });
 
     const trackShape = new CANNON.Box(
-      new CANNON.Vec3(TRACK_LENGTH / 2, 0.01, TRACK_WIDTH / 2),
+      new CANNON.Vec3(TRACK_LENGTH / 2, 0.05, TRACK_WIDTH / 2), // Thickness 0.05 m
     );
     trackBody.addShape(trackShape);
 
@@ -153,16 +146,6 @@ export class PhysicsWorld {
       rightBarrierShape,
       new CANNON.Vec3(0, barrierHeight / 2, TRACK_WIDTH / 2 + barrierWidth / 2),
     );
-
-    if (DEBUG_PHYSICS) {
-      console.log('🛤️ Track created with properties:', {
-        length: TRACK_LENGTH,
-        width: TRACK_WIDTH,
-        barrierHeight,
-        material: material.name,
-        slopeDegrees: (TRACK_SLOPE * 180) / Math.PI,
-      });
-    }
 
     return trackBody;
   }
@@ -254,9 +237,9 @@ export class PhysicsWorld {
 
     // Position on sloped track
     const x = -TRACK_LENGTH / 2 + 0.5; // -4.5
-    const trackY = -x * Math.sin(TRACK_SLOPE) + 0.005;
-    const carY = trackY + dimensions.height / 2;
-    carBody.position.set(x, carY, 0);
+    const trackY = -x * Math.sin(TRACK_SLOPE) + 0.025;
+    const carY = trackY + dimensions.height / 2 + 0.01; // 1 cm above
+    carBody.position.set(-4.5, 1.35, 0.08);
 
     carBody.allowSleep = false;
     carBody.sleepSpeedLimit = 0.1;
@@ -266,17 +249,6 @@ export class PhysicsWorld {
     carBody.collisionResponse = true;
 
     this.world.addBody(carBody);
-
-    if (DEBUG_PHYSICS) {
-      console.log(`🚗 Car ${carId} created with properties:`, {
-        dimensions,
-        position: carBody.position,
-        mass: carBody.mass,
-        material: carBody.material?.name,
-        friction: 0.03,
-        restitution: 0.01,
-      });
-    }
 
     return carBody;
   }
@@ -361,33 +333,6 @@ export class PhysicsWorld {
       }
     }
     return -1;
-  }
-
-  /**
-   * Apply a boost force to a car body - only used for initial nudge
-   */
-  applyBoost(carBody: CANNON.Body, power: number): void {
-    // Apply a small impulse in the direction of the track
-    // For gravity racing, this is mainly to overcome initial static friction
-    const direction = new CANNON.Vec3(1, 0, 0); // Forward along the track (X-axis)
-
-    // Scale by power and mass
-    const impulse = direction.scale(power * carBody.mass * 5); // Increased scale factor
-
-    // Apply impulse at center of mass
-    carBody.applyImpulse(impulse, carBody.position);
-
-    if (DEBUG_PHYSICS) {
-      console.log('🚀 Applied initial impulse:', {
-        direction: { x: direction.x, y: direction.y, z: direction.z },
-        magnitude: power * carBody.mass * 5,
-        position: {
-          x: carBody.position.x,
-          y: carBody.position.y,
-          z: carBody.position.z,
-        },
-      });
-    }
   }
 
   /**
