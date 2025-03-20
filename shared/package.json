@@ -1,20 +1,28 @@
 {
-  "name": "@toy-racers/shared",
-  "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "test": "jest"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "typescript": "^5.8.2"
-  },
-  "devDependencies": {
-    "@types/node": "^22.13.10"
-  }
+	"name": "@toy-racers/shared",
+	"version": "1.0.0",
+	"description": "",
+	"main": "dist/cjs/index.js",
+	"module": "dist/esm/index.js",
+	"types": "dist/types/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js",
+			"types": "./dist/types/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "rm -rf dist && tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json",
+		"test": "jest"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"typescript": "^5.8.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.13.10"
+	}
 }
