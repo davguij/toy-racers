@@ -1,4 +1,4 @@
-import { getAllCars } from '@toy-racers/shared/constants/cars';
+import { getAllCars } from '@toy-racers/shared';
 import { useCallback, useEffect, useState } from 'react';
 import client from '../utils/colyseusClient';
 
