@@ -56,3 +56,4 @@ The tooling for "Toy Racers" is chosen to streamline development, ensure code qu
 ## Miscellaneous
 - **@types/node**: Supplies TypeScript type definitions for Node.js in the back-end.
 - **react-babylonjs**: Bridges Babylon.js and React for seamless 3D integration in the front-end.
+  - **Version Compatibility**: Must use version 3.1.27 with React 18.2.0 to avoid runtime errors related to React's internal APIs.

@@ -16,14 +16,14 @@
 		"@babylonjs/loaders": "^7.54.0",
 		"@toy-racers/shared": "workspace:*",
 		"colyseus.js": "^0.15.17",
-		"react": "^19.0.0",
-		"react-babylonjs": "^3.2.2",
-		"react-dom": "^19.0.0"
+		"react": "^18.2.0",
+		"react-babylonjs": "^3.1.27",
+		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
 		"@types/node": "^22.13.10",
-		"@types/react": "^19.0.12",
-		"@types/react-dom": "^19.0.4",
+		"@types/react": "^18.2.0",
+		"@types/react-dom": "^18.2.0",
 		"@vitejs/plugin-react": "^4.3.4",
 		"typescript": "^5.8.2",
 		"vite": "^6.2.2"

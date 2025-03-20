@@ -23,6 +23,7 @@ This document details the technologies chosen for "Toy Racers," ensuring support
 - **react-babylonjs**
   - **Purpose**: Integrates Babylon.js scenes into React components.
   - **Reason**: Enables a seamless blend of UI and 3D content, enhancing the player experience.
+  - **Version Compatibility**: Requires React v18.x.x (specifically uses v18.2.0) and react-babylonjs v3.1.27 to ensure proper integration.
 
 ## Back-End
 
