@@ -32,6 +32,33 @@ export class RaceRoom extends Room<RaceRoomState> {
   // Timer for physics updates
   private physicsUpdateInterval: NodeJS.Timeout | null = null;
 
+  // Last time we logged race state
+  private lastLogTime = 0;
+
+  // Minimum time between logs in milliseconds
+  private readonly LOG_THROTTLE_MS = 1000;
+
+  /**
+   * Helper method to check if we should log based on throttle time
+   */
+  private shouldLog(): boolean {
+    const now = Date.now();
+    if (now - this.lastLogTime >= this.LOG_THROTTLE_MS) {
+      this.lastLogTime = now;
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Helper method for throttled logging
+   */
+  private throttledLog(logFn: () => void) {
+    if (this.shouldLog()) {
+      logFn();
+    }
+  }
+
   onCreate() {
     // Initialize room state
     this.setState(new RaceRoomState());
@@ -121,10 +148,22 @@ export class RaceRoom extends Room<RaceRoomState> {
       - Player ID: ${client.sessionId}
       - Player found: ${!!player}
       - Current status: ${this.state.status}
-      - Total players: ${this.state.players.size}`);
+      - Total players: ${this.state.players.size}
+      - Player states:
+        ${Array.from(this.state.players.entries())
+          .map(([id, p]) => `${id}: ready=${p.isReady}, carId=${p.carId}`)
+          .join('\n        ')}`);
 
     if (!player) {
       console.log(`⚠️ Player ${client.sessionId} not found in room`);
+      return;
+    }
+
+    // Verify player has selected a car before allowing ready
+    if (!player.carId) {
+      console.log(
+        `⚠️ Player ${client.sessionId} tried to ready without selecting a car`,
+      );
       return;
     }
 
@@ -132,8 +171,28 @@ export class RaceRoom extends Room<RaceRoomState> {
     player.isReady = true;
     console.log(`✅ Player ${client.sessionId} is ready`);
 
-    // Check if we should start the race
-    this.checkStartRace();
+    // Check if all players are ready
+    const allPlayersReady = Array.from(this.state.players.values()).every(
+      (p) => p.isReady,
+    );
+
+    console.log(`🔍 Race start check:
+      - All players ready: ${allPlayersReady}
+      - Room status: ${this.state.status}
+      - Total players: ${this.state.players.size}
+      - Max clients: ${this.maxClients}`);
+
+    // Only try to start race if all conditions are met
+    if (
+      allPlayersReady &&
+      this.state.status === 'ready' &&
+      this.state.players.size === this.maxClients
+    ) {
+      console.log('🎯 All conditions met for race start, initiating race...');
+      this.startRace();
+    } else {
+      console.log('⏳ Waiting for other players or room not ready');
+    }
   }
 
   /**
@@ -185,31 +244,6 @@ export class RaceRoom extends Room<RaceRoomState> {
   }
 
   /**
-   * Check if we should start the race
-   */
-  private checkStartRace() {
-    // If all players are ready, start the race
-    const allPlayersReady = Array.from(this.state.players.values()).every(
-      (player) => player.isReady,
-    );
-
-    console.log(`🔍 Checking start race:
-      - All players ready: ${allPlayersReady}
-      - Current status: ${this.state.status}
-      - Players state:
-        ${Array.from(this.state.players.entries())
-          .map(
-            ([id, player]) =>
-              `${id}: ready=${player.isReady}, carId=${player.carId}`,
-          )
-          .join('\n        ')}`);
-
-    if (allPlayersReady && this.state.status === 'ready') {
-      this.startRace();
-    }
-  }
-
-  /**
    * Start the race
    */
   private startRace() {
@@ -238,32 +272,32 @@ export class RaceRoom extends Room<RaceRoomState> {
     // Update race time in state
     this.state.currentTime = raceTime;
 
-    // Log race progress and completion checks every 10 seconds to avoid console spam
-    if (raceTime % 5000 < PHYSICS_UPDATE_INTERVAL_MS) {
-      console.log(`🏎️ Race progress at ${raceTime}ms:`);
+    // Throttle race progress logs to once per second
+    this.throttledLog(() => {
+      console.log(`🏎️ Race progress at ${Math.floor(raceTime / 1000)}s:`);
       carStates.forEach((state: CarState, playerId: string) => {
-        console.log(
-          `  - ${playerId}: Position (${state.position.x.toFixed(2)}, ${state.position.z.toFixed(2)}), Speed: ${state.speed.toFixed(2)}m/s`,
-        );
-        if (state.checkpointsPassed > 0) {
-          console.log(`    Checkpoints passed: ${state.checkpointsPassed}`);
+        const player = this.state.players.get(playerId);
+        if (!state || !player) {
+          console.log(`  - ${playerId}: No state available`);
+          return;
+        }
+
+        if (player.hasFinished) {
+          console.log(`  - ${playerId}: Finished`);
+        } else if (player.isOffTrack) {
+          console.log(`  - ${playerId}: Off track`);
+        } else {
+          // Convert speed to km/h (state.speed is in m/s)
+          const speedKmh = state.speed * 3.6;
+
+          console.log(
+            `  - ${playerId}: CP${state.checkpointsPassed} | ` +
+              `Pos(${state.position?.x?.toFixed(2) ?? '?'}, ${state.position?.z?.toFixed(2) ?? '?'}) | ` +
+              `${speedKmh.toFixed(1)} km/h`,
+          );
         }
       });
-
-      // Log race completion status
-      console.log(`🏁 Checking race completion: [
-        ${Array.from(this.state.players.entries())
-          .map(
-            ([id, player]) => `{
-          id: '${id}',
-          hasFinished: ${player.hasFinished},
-          isOffTrack: ${player.isOffTrack},
-          finishTime: ${player.finishTime}
-        }`,
-          )
-          .join(',\n        ')}
-      ]`);
-    }
+    });
 
     // Check if race is finished
     if (this.physicsManager.isRaceFinished()) {
@@ -284,6 +318,16 @@ export class RaceRoom extends Room<RaceRoomState> {
     // Set race state to finished
     this.state.status = 'finished';
     console.log(`🏁 Race finished in room ${this.roomId}`);
+
+    // Log final race results
+    console.log(
+      `📊 Final results:${Array.from(this.state.players.entries())
+        .map(
+          ([id, player]) => `
+      ${id}: ${player.hasFinished ? `Finished in ${player.finishTime}ms` : player.isOffTrack ? 'Off track' : 'DNF'}`,
+        )
+        .join('')}`,
+    );
 
     // Broadcast race results
     this.broadcast('race-finished', {

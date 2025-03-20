@@ -20,7 +20,7 @@ export const PREDEFINED_CARS: Car[] = [
     },
     shape: CarShape.SPORTS,
     wheelType: WheelType.RACING,
-    friction: 0.7, // Good traction
+    friction: 0.1, // Good traction
     restitution: 0.3, // Some bounce, but not too much
     color: '#FF5733', // Bright red/orange
   },
@@ -38,7 +38,7 @@ export const PREDEFINED_CARS: Car[] = [
     },
     shape: CarShape.TRUCK,
     wheelType: WheelType.OFFROAD,
-    friction: 0.9, // Excellent traction
+    friction: 0.2, // Excellent traction
     restitution: 0.1, // Low bounce
     color: '#3366FF', // Blue
   },
@@ -56,7 +56,7 @@ export const PREDEFINED_CARS: Car[] = [
     },
     shape: CarShape.SEDAN,
     wheelType: WheelType.STANDARD,
-    friction: 0.8, // Good traction
+    friction: 0.1, // Good traction
     restitution: 0.2, // Moderate bounce
     color: '#33FF57', // Green
   },

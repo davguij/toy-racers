@@ -1,6 +1,7 @@
 # Progress Report: Add Advanced Physics to the Race Room
 
 **Date**: March 20, 2024
+**Updated**: March 24, 2024
 
 ## Description
 This task involved adding advanced physics simulation to the race room in the backend. The goal was to create a sloped track with realistic physics for toy cars racing down it, including gravity, friction, and collisions. The physics simulation is implemented on the server and car positions and orientations are broadcast to clients.
@@ -75,3 +76,6 @@ This task involved adding advanced physics simulation to the race room in the ba
 - **Update Rate**: Set the physics update rate to approximately 60Hz (16ms intervals) to balance simulation accuracy with performance.
 - **Car Positioning**: Placed cars slightly apart (left and right) at the start to prevent immediate collisions and give each car a fair start.
 - **Race Events**: Implemented detection for two key race events: crossing the finish line and going off track, both of which can determine the race winner.
+
+## Update Notes
+- **March 24, 2024**: The physics system has been scaled down to match realistic Hot Wheels toy car dimensions. Track dimensions reduced from 10m to 2m length and 50cm to 15cm width. Car dimensions scaled to 7-8cm length, and physics parameters adjusted accordingly. See [Toy Scale Adjustments](./phase2-step6-toy-scale-adjustments.md) for complete details.

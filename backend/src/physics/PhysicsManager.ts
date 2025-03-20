@@ -49,9 +49,9 @@ export class PhysicsManager {
 
     // Position player 1 slightly to the left, player 2 slightly to the right
     if (this.carBodies.size === 1) {
-      carBody.position.z = -0.05; // Left side (adjusted for narrower track)
+      carBody.position.z = -0.08; // Left side - moved further left for wider track
     } else {
-      carBody.position.z = 0.05; // Right side (adjusted for narrower track)
+      carBody.position.z = 0.08; // Right side - moved further right for wider track
     }
 
     // Log car initialization details
@@ -80,6 +80,18 @@ export class PhysicsManager {
     this.isRaceStarted = true;
     this.raceStartTime = Date.now();
     console.log('🏁 Race physics simulation started');
+
+    for (const body of this.carBodies.values()) {
+      // Log initial car state for debugging
+      console.log('📊 Car initial physics state:', {
+        position: body.position,
+        velocity: body.velocity,
+        quaternion: body.quaternion,
+        mass: body.mass,
+        linearDamping: body.linearDamping,
+        angularDamping: body.angularDamping,
+      });
+    }
   }
 
   /**
@@ -97,8 +109,40 @@ export class PhysicsManager {
     const currentTime = Date.now();
     const raceTime = currentTime - this.raceStartTime;
 
+    // Remove continuous forward force - cars should move only due to gravity
+
     // Create car states map
     const carStates = new Map<string, CarState>();
+
+    // Log race progress
+    if (raceTime % 1000 < 16) {
+      const progressEntries: string[] = [];
+
+      // Update player transforms and check race conditions
+      for (const [playerId, body] of this.carBodies.entries()) {
+        const player = this.activePlayers.get(playerId);
+        if (!player || player.hasFinished || player.isOffTrack) continue;
+
+        // Calculate car speed in km/h for display
+        const speedMS = Math.sqrt(
+          body.velocity.x * body.velocity.x +
+            body.velocity.y * body.velocity.y +
+            body.velocity.z * body.velocity.z,
+        );
+        const speedKmh = Math.round(speedMS * 3.6 * 10) / 10; // Convert m/s to km/h with 1 decimal
+
+        progressEntries.push(
+          `  - ${playerId}: CP${player.checkpointsPassed} | Pos(${body.position.x.toFixed(2)}, ${body.position.z.toFixed(2)}) | ${speedKmh} km/h`,
+        );
+      }
+
+      if (progressEntries.length > 0) {
+        console.log(`🏎️ Race progress at ${Math.floor(raceTime / 1000)}s:`);
+        for (const entry of progressEntries) {
+          console.log(entry);
+        }
+      }
+    }
 
     // Update player transforms and check race conditions
     this.carBodies.forEach((body, playerId) => {

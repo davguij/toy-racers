@@ -3,6 +3,7 @@
 **Date**: March 20, 2024
 **Updated**: March 22, 2024
 **Updated**: March 23, 2024
+**Updated**: March 24, 2024
 
 ## Description
 This task involves creating 3D models for 3 different toy cars (Speedster, Bulldozer, All-Rounder) with unique visual characteristics that match their defined physical attributes, and developing a simple blue plastic track with a 15% slope.
@@ -109,3 +110,6 @@ This task involves creating 3D models for 3 different toy cars (Speedster, Bulld
 - **Visual Enhancements**: The simple track could be enhanced with subtle texture details while maintaining its clean appearance.
 - **Physics Fine-Tuning**: Further adjustments to the physics properties might be needed to achieve the ideal balance of realism and fun in the race experience.
 - **Wheel Animation**: In future iterations, wheels could be animated to actually rotate as the car moves, enhancing the visual realism.
+
+## Update Notes
+- **March 24, 2024**: The car models and track have been scaled down to match realistic Hot Wheels toy car dimensions. Track length reduced from 10m to 2m, width from 50cm to 15cm, and cars scaled to 7-8cm length. See [Toy Scale Adjustments](./phase2-step6-toy-scale-adjustments.md) for complete details.
