@@ -1,0 +1,178 @@
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+/* App layout */
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  color: #1a1a1a;
+}
+
+.app-content {
+  flex: 1;
+}
+
+.app-footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+/* Lobby component */
+.lobby {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lobby h2 {
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.lobby-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.create-room, .join-room {
+  text-align: center;
+}
+
+.create-room h3, .join-room h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.create-button, .join-button, .leave-button, .copy-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.create-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.create-button:hover {
+  background-color: #3e8e41;
+}
+
+.join-input-group {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.room-id-input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.join-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.join-button:hover {
+  background-color: #0b7dda;
+}
+
+.error-message {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #ffdddd;
+  border-left: 4px solid #f44336;
+  color: #730000;
+  border-radius: 4px;
+}
+
+/* Connected room info */
+.room-info {
+  text-align: center;
+}
+
+.room-info h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.room-id {
+  font-weight: bold;
+  margin-right: 0.5rem;
+  background-color: #f0f0f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.copy-button {
+  background-color: #9E9E9E;
+  color: white;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.copy-button:hover {
+  background-color: #757575;
+}
+
+.success-message {
+  margin: 1rem 0;
+  padding: 0.5rem;
+  background-color: #ddffdd;
+  border-left: 4px solid #4CAF50;
+  color: #285928;
+  border-radius: 4px;
+}
+
+.leave-button {
+  background-color: #f44336;
+  color: white;
+  margin-top: 1rem;
+}
+
+.leave-button:hover {
+  background-color: #d32f2f;
+}
+
+/* Disabled button styles */
+button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
