@@ -28,17 +28,26 @@ The MVP for "Toy Racers" focuses on enabling two players to compete in a best-of
   - Car selection screen displays each car's attributes for strategic decision-making.
 - **Purpose**: Tests the strategic core of the game without requiring a collection or unlocking system.
 
-### 3. Race Simulation
+### 3. 3D Models and Rendering
+- **Description**: Custom 3D models provide visual representation of cars and the race track.
+- **Implementation**:
+  - Custom 3D models for at least 3 different toy cars developed during implementation.
+  - Track model ("Living Room Loop") with slopes, turns, and small walls created during implementation.
+  - Babylon.js used to render the models and provide a 3D racing environment.
+- **Purpose**: Delivers a visually engaging racing experience with cars that match their physical attributes.
+
+### 4. Race Simulation
 - **Description**: Races are simulated using advanced physics, with outcomes determined by car attributes and track layout.
 - **Implementation**:
   - Server-side simulation using Cannon.js for gravity, momentum, and collisions.
-  - Advanced physics including car-to-car collisions, friction differences based on car attributes, and realistic gravity effects.
+  - Basic collision mechanics (without car deformation) between cars and with track elements.
+  - Friction differences based on car attributes and realistic gravity effects.
   - Colyseus broadcasts game state updates (e.g., car positions) to clients every 50ms.
   - Clients render the race in 3D using Babylon.js, updating visuals based on server data.
   - Race ends when a car crosses the finish line or flies off the track.
 - **Purpose**: Delivers the physics-driven racing experience central to the game.
 
-### 4. Camera Views
+### 5. Camera Views
 - **Description**: Players can switch between two camera perspectives during the race.
 - **Implementation**:
   - **Third-person view**: Camera follows the player's car from behind.
@@ -46,7 +55,7 @@ The MVP for "Toy Racers" focuses on enabling two players to compete in a best-of
   - Switching is handled locally on the client using Babylon.js.
 - **Purpose**: Enhances the spectator experience with dynamic viewing options.
 
-### 5. Best-of-Three Series
+### 6. Best-of-Three Series
 - **Description**: Players compete in a series of three races, with the overall winner determined by the best score.
 - **Implementation**:
   - Colyseus manages the series within a single room, tracking wins in memory.
@@ -54,7 +63,7 @@ The MVP for "Toy Racers" focuses on enabling two players to compete in a best-of
   - The first player to win two races is declared the overall winner.
 - **Purpose**: Provides a competitive multiplayer structure to test engagement.
 
-### 6. User Interface
+### 7. User Interface
 - **Description**: A minimal but functional UI supports the gameplay flow.
 - **Implementation**:
   - **Main Menu**: Options to "Play" (create or join a race).
@@ -62,25 +71,25 @@ The MVP for "Toy Racers" focuses on enabling two players to compete in a best-of
   - **Race Screen**: Shows the 3D race, camera controls, race number (1/3, 2/3, 3/3), and series score.
   - **Post-Race Screen**: Displays the race winner and updated series score.
   - **Series End Screen**: Shows the overall winner with options to play again or exit.
-  - Built with React.js and styled minimally for functionality.
+  - Built with React.js and styled minimally for functionality, with design decisions reviewed during implementation.
 - **Purpose**: Ensures players can navigate and interact with the game seamlessly.
 
-### 7. Track
-- **Description**: A single downhill track is used for all races.
+### 8. Disconnection Handling
+- **Description**: The game can handle player disconnections gracefully without disrupting the race.
 - **Implementation**:
-  - Predefined track ("Living Room Loop") with slopes, turns, and small walls.
-  - Hardcoded track geometry in Cannon.js for server simulation.
-  - Flying off the track eliminates a player, with the server detecting this event.
-- **Purpose**: Provides a consistent environment to test gameplay mechanics.
+  - Race simulation continues even if one or both players disconnect.
+  - Race results are broadcast normally to connected players.
+  - Disconnected players miss the race result but don't affect the race outcome.
+- **Purpose**: Ensures a smooth experience even with unstable connections, allowing races to complete regardless of connection status.
 
-### 8. Deployment
+### 9. Deployment
 - **Description**: The game is accessible via browser with all components hosted together.
 - **Implementation**:
-  - Deployed on Railway as a full-stack application (front-end, back-end, database).
+  - Deployed on Railway as a full-stack application (front-end, back-end).
   - Supports WebSocket connections for real-time multiplayer via Colyseus.
 - **Purpose**: Ensures broad accessibility and validates the tech stack in a live environment.
 
-### 9. Authentication (Final MVP Feature)
+### 10. Authentication (Final MVP Feature)
 - **Description**: Players can sign up and log in to participate in races.
 - **Implementation**:
   - Uses Clerk for secure user authentication and session management.
@@ -93,13 +102,13 @@ The MVP for "Toy Racers" focuses on enabling two players to compete in a best-of
 ## Simplifications and Assumptions
 To keep the MVP lean and focused, the following simplifications are made:
 - **Car Collection**: All players share the same fixed set of cars; no unlocking or player-specific collections are implemented.
-- **Car Data Storage**: Car attributes will be hardcoded in the shared package, not stored in a database.
+- **Data Storage**: Car and track data will be hardcoded in the shared package with no database needed for the MVP.
 - **Track**: Limited to one track ("Living Room Loop") to reduce development scope.
 - **Multiplayer**: Restricted to two-player races with a basic lobby system; no advanced matchmaking or random opponent pairing.
-- **Physics**: Uses advanced physics simulation with realistic car attribute effects (e.g., weight as mass, wheels as friction).
+- **Physics**: Uses advanced physics with basic collision mechanics (no car deformation) to keep the game casual and performant.
 - **UI**: Prioritizes functionality over polished aesthetics, with UI design developed iteratively during implementation.
 - **Testing**: Features will be tested manually without automated tests for the MVP.
-- **Disconnections**: If a player disconnects, the other wins the series by default.
+- **3D Models**: Custom 3D models for cars and the track will be developed during the implementation process.
 
 These simplifications allow the MVP to focus on validating the core concept while leaving room for future enhancements like additional tracks, car customization, and progression systems.
 
@@ -122,4 +131,4 @@ These simplifications allow the MVP to focus on validating the core concept whil
 ---
 
 ## Conclusion
-This MVP for "Toy Racers" delivers a focused, playable version of the game that tests its core value proposition: strategic car selection and physics-driven multiplayer racing. By implementing essential features on a single track with advanced physics, it provides a foundation for gathering user feedback and iterating toward a full release. The use of the specified tech stack ensures efficient development and scalability, aligning with the game's browser-based, accessible design.
+This MVP for "Toy Racers" delivers a focused, playable version of the game that tests its core value proposition: strategic car selection and physics-driven multiplayer racing. By implementing essential features on a single track with advanced but simplified physics, it provides a foundation for gathering user feedback and iterating toward a full release. The use of the specified tech stack ensures efficient development and scalability, aligning with the game's browser-based, accessible design.
