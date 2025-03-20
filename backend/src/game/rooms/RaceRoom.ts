@@ -171,9 +171,9 @@ export class RaceRoom extends Room<RaceRoomState> {
     player.isReady = true;
     console.log(`✅ Player ${client.sessionId} is ready`);
 
-    // Check if all players are ready
+    // Check if all players are ready and have selected cars
     const allPlayersReady = Array.from(this.state.players.values()).every(
-      (p) => p.isReady,
+      (p) => p.isReady && p.carId !== '',
     );
 
     console.log(`🔍 Race start check:
@@ -182,12 +182,8 @@ export class RaceRoom extends Room<RaceRoomState> {
       - Total players: ${this.state.players.size}
       - Max clients: ${this.maxClients}`);
 
-    // Only try to start race if all conditions are met
-    if (
-      allPlayersReady &&
-      this.state.status === 'ready' &&
-      this.state.players.size === this.maxClients
-    ) {
+    // Start race if all players are ready and we have max players
+    if (allPlayersReady && this.state.players.size === this.maxClients) {
       console.log('🎯 All conditions met for race start, initiating race...');
       this.startRace();
     } else {
