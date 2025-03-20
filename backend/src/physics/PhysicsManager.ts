@@ -187,8 +187,6 @@ export class PhysicsManager {
       }),
     );
 
-    console.log('🏁 Checking race completion:', playerStates);
-
     // Race is finished if all players have either finished or gone off track
     return Array.from(this.activePlayers.values()).every(
       (player) => player.hasFinished || player.isOffTrack,

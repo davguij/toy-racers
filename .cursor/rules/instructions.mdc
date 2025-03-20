@@ -1,6 +1,7 @@
 ---
-description: Global Project Rules for Toy Racers
-globs: *
+description: 
+globs: 
+alwaysApply: true
 ---
 
 # Global Project Rules for Toy Racers
@@ -32,3 +33,4 @@ globs: *
 - Ensure all API endpoints are properly documented.
 - Implement authentication using Clerk's JWT.
 - Use pnpm for package management and Turborepo for task automation.
+- To start the encv

@@ -117,6 +117,12 @@ export class RaceRoom extends Room<RaceRoomState> {
   private handlePlayerReady(client: Client) {
     const player = this.state.players.get(client.sessionId);
 
+    console.log(`🔍 Handling player ready:
+      - Player ID: ${client.sessionId}
+      - Player found: ${!!player}
+      - Current status: ${this.state.status}
+      - Total players: ${this.state.players.size}`);
+
     if (!player) {
       console.log(`⚠️ Player ${client.sessionId} not found in room`);
       return;
@@ -138,6 +144,19 @@ export class RaceRoom extends Room<RaceRoomState> {
     const allPlayersSelectedCar = Array.from(this.state.players.values()).every(
       (player) => player.carId !== '',
     );
+
+    console.log(`🔍 Checking transition to ready:
+      - Total players: ${this.state.players.size}
+      - Max clients: ${this.maxClients}
+      - All players selected car: ${allPlayersSelectedCar}
+      - Current status: ${this.state.status}
+      - Players state:
+        ${Array.from(this.state.players.entries())
+          .map(
+            ([id, player]) =>
+              `${id}: carId=${player.carId}, ready=${player.isReady}`,
+          )
+          .join('\n        ')}`);
 
     if (allPlayersSelectedCar && this.state.players.size === this.maxClients) {
       this.state.status = 'ready';
@@ -174,6 +193,17 @@ export class RaceRoom extends Room<RaceRoomState> {
       (player) => player.isReady,
     );
 
+    console.log(`🔍 Checking start race:
+      - All players ready: ${allPlayersReady}
+      - Current status: ${this.state.status}
+      - Players state:
+        ${Array.from(this.state.players.entries())
+          .map(
+            ([id, player]) =>
+              `${id}: ready=${player.isReady}, carId=${player.carId}`,
+          )
+          .join('\n        ')}`);
+
     if (allPlayersReady && this.state.status === 'ready') {
       this.startRace();
     }
@@ -208,8 +238,8 @@ export class RaceRoom extends Room<RaceRoomState> {
     // Update race time in state
     this.state.currentTime = raceTime;
 
-    // Log race progress (every second to avoid console spam)
-    if (raceTime % 1000 < PHYSICS_UPDATE_INTERVAL_MS) {
+    // Log race progress and completion checks every 10 seconds to avoid console spam
+    if (raceTime % 5000 < PHYSICS_UPDATE_INTERVAL_MS) {
       console.log(`🏎️ Race progress at ${raceTime}ms:`);
       carStates.forEach((state: CarState, playerId: string) => {
         console.log(
@@ -219,6 +249,20 @@ export class RaceRoom extends Room<RaceRoomState> {
           console.log(`    Checkpoints passed: ${state.checkpointsPassed}`);
         }
       });
+
+      // Log race completion status
+      console.log(`🏁 Checking race completion: [
+        ${Array.from(this.state.players.entries())
+          .map(
+            ([id, player]) => `{
+          id: '${id}',
+          hasFinished: ${player.hasFinished},
+          isOffTrack: ${player.isOffTrack},
+          finishTime: ${player.finishTime}
+        }`,
+          )
+          .join(',\n        ')}
+      ]`);
     }
 
     // Check if race is finished
