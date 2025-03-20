@@ -12,6 +12,7 @@ The tooling for "Toy Racers" is chosen to streamline development, ensure code qu
 - **React.js**: Powers the user interface, including menus, car selection, and race HUD elements.
 - **Babylon.js**: Enables 3D rendering for toy cars, race tracks, and dynamic camera views.
 - **Vite**: Facilitates rapid development and optimized production builds, configured via `vite.config.js` with TypeScript support.
+  - **Development Proxy**: Configured to handle CORS issues during development by proxying HTTP requests (`/api`) and WebSocket connections (`/ws`) to the backend server, allowing seamless communication between the frontend (port 3000) and backend (port 3001).
 - **TypeScript**: Provides type safety across the front-end, configured with a `tsconfig.json` tailored for React and modern JavaScript features.
 
 ## Back-End Tools

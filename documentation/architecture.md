@@ -50,7 +50,7 @@ graph TD
 - **Express.js**
 
   - Provides RESTful endpoints for tasks like:
-    - Authenticating players with Clerk’s JWT.
+    - Authenticating players with Clerk's JWT.
     - Managing player data and race setups.
 
 - **Colyseus**
@@ -85,6 +85,10 @@ graph TD
 
 - **RESTful API**
   - Handles non-real-time tasks like authentication and data retrieval.
+
+- **CORS Handling**
+  - **Development**: Vite's development proxy routes requests from frontend (port 3000) to backend (port 3001), avoiding CORS issues with both HTTP and WebSocket connections.
+  - **Production**: Both frontend and backend are served from the same domain, eliminating CORS concerns.
 
 #### 5. Authentication (Clerk)
 
