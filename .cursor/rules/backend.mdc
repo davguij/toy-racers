@@ -1,0 +1,17 @@
+---
+description: Backend Specific Rules
+globs: backend/**
+---
+
+# Backend Specific Rules
+
+- Use Node.js and Express.js for server-side logic.
+- Use Colyseus for multiplayer game functionality and room management.
+- Use Cannon.js for physics simulations.
+- Ensure all API endpoints are properly documented and follow RESTful principles.
+- Implement authentication using Clerk's JWT for protected routes.
+- Use PostgreSQL for database interactions, with models defined in `backend/src/models/`.
+- Ensure proper error handling and logging for all operations.
+- Use async/await for all asynchronous operations.
+- Place API routes in `backend/src/api/routes/` and controllers in `backend/src/api/controllers/`.
+- Ensure game state is synchronized across all clients in real-time using Colyseus.

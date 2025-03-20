@@ -1,0 +1,19 @@
+{
+  "name": "toy-racers",
+  "version": "1.0.0",
+  "description": "",
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "lint": "biome check --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "turbo": "^2.4.4"
+  }
+}

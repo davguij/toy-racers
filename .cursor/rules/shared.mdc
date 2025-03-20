@@ -1,0 +1,12 @@
+---
+description: Shared Code Rules
+globs: shared/**
+---
+
+# Shared Code Rules
+
+- Define shared types and interfaces in `shared/src/types/`.
+- Place utility functions in `shared/src/utils/`.
+- Ensure shared code is compatible with both frontend and backend.
+- Use TypeScript for all shared code to maintain type safety.
+- Ensure consistency between frontend and backend implementations.

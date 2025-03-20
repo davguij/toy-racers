@@ -1,0 +1,26 @@
+{
+  "name": "@toy-racers/backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon src/server.ts",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cannon-es": "^0.20.0",
+    "colyseus": "^0.16.3",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/express": "^4.17.21",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}

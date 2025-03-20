@@ -1,0 +1,17 @@
+---
+description: Frontend Specific Rules
+globs: frontend/**
+---
+
+# Frontend Specific Rules
+
+- Use React.js for building UI components.
+- Use Babylon.js for 3D rendering.
+- Ensure all components are functional components with proper TypeScript typing.
+- Use custom hooks for state management where appropriate.
+- Optimize 3D scenes for performance in the browser.
+- Ensure responsive design for different screen sizes.
+- Place new components in the `frontend/src/components/` directory.
+- Place 3D scenes in the `frontend/src/scenes/` directory.
+- Use the `frontend/src/hooks/` directory for custom hooks.
+- Use CSS modules or styled-components for styling, as per the project's convention.

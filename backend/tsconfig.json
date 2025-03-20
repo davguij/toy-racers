@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es6",                // Target ECMAScript 6, widely supported in modern Node.js
+    "module": "commonjs",           // Use CommonJS module system, default for Node.js
+    "lib": ["es6"],                 // Include ES6 library features for type definitions
+    "outDir": "dist",               // Output compiled JavaScript files to the 'dist' directory
+    "rootDir": "src",               // Source files are located in the 'src' directory
+    "strict": true,                 // Enable all strict type-checking options
+    "esModuleInterop": true,        // Enable interop between CommonJS and ES Modules
+    "moduleResolution": "node",     // Use Node.js-style module resolution
+    "sourceMap": true,              // Generate source maps for debugging
+    "noImplicitAny": true,          // Disallow implicit 'any' types for better type safety
+    "incremental": true,            // Enable incremental compilation for faster builds
+    "resolveJsonModule": true,      // Allow importing JSON files as modules
+    "skipLibCheck": true            // Skip type checking of declaration files for faster compilation
+  },
+  "include": ["src"],               // Compile all files in the 'src' directory
+  "exclude": ["node_modules"]       // Exclude 'node_modules' from compilation
+}

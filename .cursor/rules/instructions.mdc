@@ -1,0 +1,34 @@
+---
+description: Global Project Rules for Toy Racers
+globs: *
+---
+
+# Global Project Rules for Toy Racers
+
+## About the Game
+"Toy Racers" is a physics-based racing game where players collect toy cars with unique attributes and compete in multiplayer races. The game is browser-based, using HTML5 and WebGL, with key features including strategic car selection, real-time multiplayer, and multiple camera angles.
+
+## Architecture Overview
+- The game follows a client-server architecture.
+- **Client**: React.js for UI, Babylon.js for 3D rendering.
+- **Server**: Express.js for RESTful APIs, Colyseus for multiplayer game logic.
+- **Database**: PostgreSQL for persistent data storage.
+- **Authentication**: Clerk for user authentication.
+
+## Coding Standards
+- Use TypeScript for all code.
+- Follow standard naming conventions (e.g., camelCase for variables, PascalCase for classes).
+- Write clean, readable code with proper indentation and comments.
+- Ensure all code is tested with unit tests.
+- Use ESLint for code linting and follow the project's ESLint configuration.
+- For asynchronous operations, use async/await.
+- Ensure all code adheres to the project's folder structure.
+
+## Project-Specific Guidelines
+- Use React.js for building UI components.
+- Use Babylon.js for 3D rendering.
+- Use Colyseus for multiplayer game functionality.
+- Use Cannon.js for physics simulations.
+- Ensure all API endpoints are properly documented.
+- Implement authentication using Clerk's JWT.
+- Use pnpm for package management and Turborepo for task automation.
