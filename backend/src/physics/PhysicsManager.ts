@@ -49,9 +49,9 @@ export class PhysicsManager {
 
     // Position player 1 slightly to the left, player 2 slightly to the right
     if (this.carBodies.size === 1) {
-      carBody.position.z = -1.5; // Left side
+      carBody.position.z = -0.05; // Left side (adjusted for narrower track)
     } else {
-      carBody.position.z = 1.5; // Right side
+      carBody.position.z = 0.05; // Right side (adjusted for narrower track)
     }
 
     // Log car initialization details

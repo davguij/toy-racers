@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# llms.txt
+
+- Use [babylon-js.txt](mdc:llms-txt/babylon-js.txt) for context on how to work with Babylon.js
+- Use [colyseus-js.txt](mdc:llms-txt/colyseus-js.txt) for context on how to work with Colyseus

@@ -25,9 +25,9 @@
 - **Test**: Join the room with two clients and manually verify that the server logs show the cars' positions changing as they move down the slope, with realistic physics interactions.
 
 ### Step 5: Create 3D Models for Cars and Track
-- **User Story**: As a player, I need visually distinct cars and an interesting track to enhance the racing experience.
-- **Task**: Develop 3D models for at least 3 different toy cars with unique visual characteristics corresponding to their physical attributes, and create a "Living Room Loop" track model with slopes, turns, and small walls.
-- **Test**: Review the 3D models to ensure they are visually appropriate, properly scaled, and match their defined physical attributes.
+- **User Story**: As a player, I need visually distinct cars and a clean track to enhance the racing experience.
+- **Task**: Develop 3D models for at least 3 different toy cars with unique visual characteristics corresponding to their physical attributes, and create a simple blue plastic track with small barriers, a 15% slope, and clearly marked start and finish lines.
+- **Test**: Review the 3D models to ensure they are visually appropriate, properly scaled, and match their defined physical attributes. Verify that the track is clean, minimalist, and provides a clear racing path.
 
 ### Step 6: Render the Race in the Front-End
 - **User Story**: As a player, I need to see the race happen in 3D so that I can watch my car compete.

@@ -4,7 +4,7 @@ import type React from 'react';
 import { useRef } from 'react';
 import '@babylonjs/loaders';
 import type { Car } from '@toy-racers/shared';
-import { Engine, Scene, useBeforeRender, useScene } from 'react-babylonjs';
+import { Box, Engine, Scene, useBeforeRender, useScene } from 'react-babylonjs';
 import { CarFactory } from './models/CarFactory';
 
 interface PlayerState {
@@ -25,7 +25,7 @@ interface TrackSceneProps {
 }
 
 /**
- * Track scene component for the "Living Room Loop" track.
+ * Track scene component for a simple blue plastic track.
  * Renders the track and cars based on player states.
  */
 export const TrackScene: React.FC<TrackSceneProps> = ({
@@ -68,6 +68,17 @@ const TrackSceneContent: React.FC<TrackSceneContentProps> = ({
   const scene = useScene();
   const cameraRef = useRef<BabylonArcRotateCamera>(null);
 
+  // Track dimensions (matching backend PhysicsWorld.ts)
+  const TRACK_LENGTH = 2.0; // 2 meters long (scaled down for toy size)
+  const TRACK_WIDTH = 0.15; // 15 cm wide (approx width of a Hot Wheels track)
+  const TRACK_SLOPE = Math.atan(0.15); // 15% slope in radians
+
+  // Track colors
+  const TRACK_COLOR = Color3.FromHexString('#3399FF'); // Blue plastic color
+  const BARRIER_COLOR = Color3.FromHexString('#2277DD'); // Slightly darker blue for barriers
+  const START_LINE_COLOR = Color3.White(); // White for start line
+  const FINISH_LINE_COLOR = Color3.FromHexString('#FF0000'); // Red for finish line
+
   // Before render callback to update camera position
   useBeforeRender(() => {
     if (!scene || !cameraRef.current) return;
@@ -88,18 +99,18 @@ const TrackSceneContent: React.FC<TrackSceneContentProps> = ({
       // Position the camera behind the car
       cameraRef.current.setTarget(targetPos);
       cameraRef.current.position = new Vector3(
-        targetPos.x,
-        targetPos.y + 2,
-        targetPos.z - 5,
+        targetPos.x - 0.4,
+        targetPos.y + 0.2,
+        targetPos.z - 0.6,
       );
     } else if (cameraMode === 'first-person') {
       // Position the camera on the car
       cameraRef.current.setTarget(
-        new Vector3(targetPos.x, targetPos.y, targetPos.z + 5),
+        new Vector3(targetPos.x + 0.6, targetPos.y, targetPos.z),
       );
       cameraRef.current.position = new Vector3(
         targetPos.x,
-        targetPos.y + 0.5,
+        targetPos.y + 0.05,
         targetPos.z,
       );
     }
@@ -113,147 +124,108 @@ const TrackSceneContent: React.FC<TrackSceneContentProps> = ({
         ref={cameraRef}
         alpha={Math.PI / 2}
         beta={Math.PI / 4}
-        radius={10}
+        radius={5}
         target={Vector3.Zero()}
         minZ={0.1}
       />
 
-      {/* Lights */}
-      <hemisphericLight
-        name="light1"
-        intensity={0.7}
-        direction={new Vector3(0, 1, 0)}
-      />
+      {/* Directional Light for good visibility */}
       <directionalLight
-        name="light2"
-        intensity={0.5}
-        direction={new Vector3(0, -1, 1)}
-      />
-      <pointLight
-        name="light3"
-        intensity={0.3}
-        position={new Vector3(0, 5, 0)}
+        name="light"
+        direction={new Vector3(0, -1, 0.5)}
+        intensity={0.8}
+        position={new Vector3(0, 10, -10)}
       />
 
-      {/* Living Room Loop Track - Floor */}
-      <box
-        name="track-floor"
-        width={20}
-        height={0.1}
-        depth={6}
-        rotation={new Vector3(Math.PI * 0.08, 0, 0)} // Slight slope
+      {/* Ambient light to prevent total darkness */}
+      <hemisphericLight
+        name="ambient"
+        intensity={0.3}
+        direction={new Vector3(0, 1, 0)}
+      />
+
+      {/* Main track surface - blue plastic */}
+      <Box
+        name="track-surface"
+        width={TRACK_LENGTH}
+        height={0.01}
+        depth={TRACK_WIDTH}
+        rotation={new Vector3(TRACK_SLOPE, 0, 0)}
         position={new Vector3(0, 0, 0)}
       >
         <standardMaterial
-          name="track-floor-material"
-          diffuseColor={Color3.FromHexString('#8B4513')} // Brown wooden floor
-          specularColor={Color3.FromHexString('#553311')}
+          name="track-material"
+          diffuseColor={TRACK_COLOR}
+          specularColor={Color3.White()}
+          specularPower={64}
+        />
+      </Box>
+
+      {/* Left barrier */}
+      <Box
+        name="left-barrier"
+        width={TRACK_LENGTH}
+        height={0.03}
+        depth={0.01}
+        rotation={new Vector3(TRACK_SLOPE, 0, 0)}
+        position={new Vector3(0, 0.015, -TRACK_WIDTH / 2 - 0.005)}
+      >
+        <standardMaterial
+          name="left-barrier-material"
+          diffuseColor={BARRIER_COLOR}
+          specularColor={Color3.White()}
           specularPower={32}
         />
-      </box>
+      </Box>
 
-      {/* Left wall */}
-      <box
-        name="track-wall-left"
-        width={20}
-        height={0.5}
-        depth={0.1}
-        position={new Vector3(0, 0.3, 3)}
-        rotation={new Vector3(Math.PI * 0.08, 0, 0)} // Same slope as floor
+      {/* Right barrier */}
+      <Box
+        name="right-barrier"
+        width={TRACK_LENGTH}
+        height={0.03}
+        depth={0.01}
+        rotation={new Vector3(TRACK_SLOPE, 0, 0)}
+        position={new Vector3(0, 0.015, TRACK_WIDTH / 2 + 0.005)}
       >
         <standardMaterial
-          name="track-wall-left-material"
-          diffuseColor={Color3.FromHexString('#CD853F')} // Lighter wood
+          name="right-barrier-material"
+          diffuseColor={BARRIER_COLOR}
+          specularColor={Color3.White()}
+          specularPower={32}
         />
-      </box>
-
-      {/* Right wall */}
-      <box
-        name="track-wall-right"
-        width={20}
-        height={0.5}
-        depth={0.1}
-        position={new Vector3(0, 0.3, -3)}
-        rotation={new Vector3(Math.PI * 0.08, 0, 0)}
-      >
-        <standardMaterial
-          name="track-wall-right-material"
-          diffuseColor={Color3.FromHexString('#CD853F')}
-        />
-      </box>
+      </Box>
 
       {/* Start line */}
-      <box
+      <Box
         name="start-line"
-        width={6}
-        height={0.01}
-        depth={0.2}
-        position={new Vector3(-9, 0.06, 0)}
-        rotation={new Vector3(Math.PI * 0.08, 0, 0)}
+        width={0.02}
+        height={0.005}
+        depth={TRACK_WIDTH}
+        rotation={new Vector3(TRACK_SLOPE, 0, 0)}
+        position={new Vector3(-TRACK_LENGTH / 2 + 0.2, 0.006, 0)}
       >
         <standardMaterial
           name="start-line-material"
-          diffuseColor={Color3.White()}
+          diffuseColor={START_LINE_COLOR}
+          emissiveColor={Color3.FromHexString('#DDDDDD')}
         />
-      </box>
+      </Box>
 
       {/* Finish line */}
-      <box
+      <Box
         name="finish-line"
-        width={6}
-        height={0.01}
-        depth={0.2}
-        position={new Vector3(9, -1.5, 0)} // At the bottom of the slope
-        rotation={new Vector3(Math.PI * 0.08, 0, 0)}
+        width={0.02}
+        height={0.005}
+        depth={TRACK_WIDTH}
+        rotation={new Vector3(TRACK_SLOPE, 0, 0)}
+        position={new Vector3(TRACK_LENGTH / 2 - 0.2, 0.006, 0)}
       >
         <standardMaterial
           name="finish-line-material"
-          diffuseColor={Color3.FromHexString('#FF0000')} // Red
+          diffuseColor={FINISH_LINE_COLOR}
+          emissiveColor={Color3.FromHexString('#880000')}
         />
-      </box>
-
-      {/* Obstacles */}
-
-      {/* Small bump in the middle */}
-      <box
-        name="obstacle-bump"
-        width={3}
-        height={0.2}
-        depth={2}
-        position={new Vector3(0, 0.05, 0)}
-        rotation={new Vector3(Math.PI * 0.08, 0, 0)}
-      >
-        <standardMaterial
-          name="obstacle-bump-material"
-          diffuseColor={Color3.FromHexString('#A0522D')} // Dark brown
-        />
-      </box>
-
-      {/* Random toys as obstacles */}
-      <sphere
-        name="obstacle-ball"
-        diameter={0.8}
-        position={new Vector3(4, 0.4, -1.5)}
-      >
-        <standardMaterial
-          name="obstacle-ball-material"
-          diffuseColor={Color3.FromHexString('#FF5733')} // Orange-red
-        />
-      </sphere>
-
-      <box
-        name="obstacle-block"
-        width={0.8}
-        height={0.8}
-        depth={0.8}
-        position={new Vector3(-5, 0.4, 1.5)}
-        rotation={new Vector3(0, Math.PI / 4, 0)}
-      >
-        <standardMaterial
-          name="obstacle-block-material"
-          diffuseColor={Color3.FromHexString('#3366FF')} // Blue
-        />
-      </box>
+      </Box>
 
       {/* Render all player cars */}
       {playerEntries.map(([id, player]) => {
