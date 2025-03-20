@@ -54,6 +54,12 @@ importers:
 
   frontend:
     dependencies:
+      '@babylonjs/core':
+        specifier: ^7.54.0
+        version: 7.54.0
+      '@babylonjs/loaders':
+        specifier: ^7.54.0
+        version: 7.54.0(@babylonjs/core@7.54.0)(babylonjs-gltf2interface@7.54.0)
       '@toy-racers/shared':
         specifier: workspace:*
         version: link:../shared
@@ -63,6 +69,9 @@ importers:
       react:
         specifier: ^19.0.0
         version: 19.0.0
+      react-babylonjs:
+        specifier: ^3.2.2
+        version: 3.2.2(@babylonjs/core@7.54.0)(@babylonjs/gui@7.54.0(@babylonjs/core@7.54.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
@@ -180,6 +189,20 @@ packages:
   '@babel/types@7.26.10':
     resolution: {integrity: sha512-emqcG3vHrpxUKTrxcblR36dcrcoRDvKmnL/dCL6ZsHaShW80qxCAcNhzQZrpeM765VzEos+xOi4s+r4IXzTwdQ==}
     engines: {node: '>=6.9.0'}
+
+  '@babylonjs/core@7.54.0':
+    resolution: {integrity: sha512-K9NvHkmJD42/x1X8ZrFbLfwR/j3S4wdrpWrPDVNjS7+kDb4KKgqRDnmXHnigAPh5ddxJT+6DbtLyRmlzdQUZug==}
+
+  '@babylonjs/gui@7.54.0':
+    resolution: {integrity: sha512-+i6VOcj+QX7TFuPz1kLEnWPzLlFjm2E2sr5QPLioWLxRvGew06EoAS2HsWj5ZGmmAFIFswiOPV3cXt/w7Ff37A==}
+    peerDependencies:
+      '@babylonjs/core': ^7.0.0
+
+  '@babylonjs/loaders@7.54.0':
+    resolution: {integrity: sha512-ibjN9PMxH7Wvs2ymf7+I/y992doxvKeIxaAGSA4w4dRs03XxYM062rr/xv135mL6KVIX2154mzXSAU4rpmMu9w==}
+    peerDependencies:
+      '@babylonjs/core': ^7.0.0
+      babylonjs-gltf2interface: ^7.0.0
 
   '@biomejs/biome@1.9.4':
     resolution: {integrity: sha512-1rkd7G70+o9KkTn5KLmDYXihGoTaIGO9PIIN2ZB7UJxFrWw04CZHPYiMRjYsaDvVV7hP1dYNRLxSANLaBFGpog==}
@@ -695,6 +718,9 @@ packages:
   asn1.js@5.4.1:
     resolution: {integrity: sha512-+I//4cYPccV8LdmBLiX8CYvf9Sp3vQsrqu2QNXRcrbiWvcx/UdlFiqUJJzxRQxgsZmvhXhn4cSKeSmoFjVdupA==}
 
+  babylonjs-gltf2interface@7.54.0:
+    resolution: {integrity: sha512-RxuRDjbzDsg43ItUdZZf5pgx9E6Pcb4YuEW/potc2+9oJvvKguwItE3DXereMs+q5ATYcdiQw2TEOtVgESOodg==}
+
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
@@ -1145,6 +1171,10 @@ packages:
   lodash.once@4.1.1:
     resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
 
+  loose-envify@1.4.0:
+    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+    hasBin: true
+
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
@@ -1291,10 +1321,28 @@ packages:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
     engines: {node: '>= 0.8'}
 
+  react-babylonjs@3.2.2:
+    resolution: {integrity: sha512-6DlagvkkraOmiJhYGUYwipBr7enkz6uz5tEvaP92+olF87JBH2rAcgfXP7JgerUWuqH8hvOvs8Nta9Ad+VIrNg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      '@babylonjs/core': 5.x || 6.x || 7.x
+      '@babylonjs/gui': 5.x || 6.x || 7.x
+      react: '>=18'
+      react-dom: '>=18'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+
   react-dom@19.0.0:
     resolution: {integrity: sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==}
     peerDependencies:
       react: ^19.0.0
+
+  react-reconciler@0.27.0:
+    resolution: {integrity: sha512-HmMDKciQjYmBRGuuhIaKA1ba/7a+UsM5FzOZsMO2JYHt9Jh8reCb7j1eDC95NOyUlKM9KRyvdx0flBuDvYSBoA==}
+    engines: {node: '>=0.10.0'}
+    peerDependencies:
+      react: ^18.0.0
 
   react-refresh@0.14.2:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
@@ -1334,6 +1382,9 @@ packages:
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+
+  scheduler@0.21.0:
+    resolution: {integrity: sha512-1r87x5fz9MXqswA2ERLo0EbOAU74DpIUO090gIasYTqlVoJeMcl+Z1Rg7WHz+qtPujhS/hGIt9kxZOYBV3faRQ==}
 
   scheduler@0.25.0:
     resolution: {integrity: sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==}
@@ -1682,6 +1733,17 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
+
+  '@babylonjs/core@7.54.0': {}
+
+  '@babylonjs/gui@7.54.0(@babylonjs/core@7.54.0)':
+    dependencies:
+      '@babylonjs/core': 7.54.0
+
+  '@babylonjs/loaders@7.54.0(@babylonjs/core@7.54.0)(babylonjs-gltf2interface@7.54.0)':
+    dependencies:
+      '@babylonjs/core': 7.54.0
+      babylonjs-gltf2interface: 7.54.0
 
   '@biomejs/biome@1.9.4':
     optionalDependencies:
@@ -2103,6 +2165,8 @@ snapshots:
       minimalistic-assert: 1.0.1
       safer-buffer: 2.1.2
     optional: true
+
+  babylonjs-gltf2interface@7.54.0: {}
 
   balanced-match@1.0.2: {}
 
@@ -2621,6 +2685,10 @@ snapshots:
 
   lodash.once@4.1.1: {}
 
+  loose-envify@1.4.0:
+    dependencies:
+      js-tokens: 4.0.0
+
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -2749,10 +2817,25 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
+  react-babylonjs@3.2.2(@babylonjs/core@7.54.0)(@babylonjs/gui@7.54.0(@babylonjs/core@7.54.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      '@babylonjs/core': 7.54.0
+      '@babylonjs/gui': 7.54.0(@babylonjs/core@7.54.0)
+      react: 19.0.0
+      react-reconciler: 0.27.0(react@19.0.0)
+    optionalDependencies:
+      react-dom: 19.0.0(react@19.0.0)
+
   react-dom@19.0.0(react@19.0.0):
     dependencies:
       react: 19.0.0
       scheduler: 0.25.0
+
+  react-reconciler@0.27.0(react@19.0.0):
+    dependencies:
+      loose-envify: 1.4.0
+      react: 19.0.0
+      scheduler: 0.21.0
 
   react-refresh@0.14.2: {}
 
@@ -2804,6 +2887,10 @@ snapshots:
   safe-buffer@5.2.1: {}
 
   safer-buffer@2.1.2: {}
+
+  scheduler@0.21.0:
+    dependencies:
+      loose-envify: 1.4.0
 
   scheduler@0.25.0: {}
 

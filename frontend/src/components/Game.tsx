@@ -1,4 +1,7 @@
+import { type Car, getCarById } from '@toy-racers/shared';
 import { useEffect, useState } from 'react';
+import { TrackScene } from '../scenes';
+import '../styles/Game.css';
 
 // Type for race finished message
 interface RaceFinishedMessage {
@@ -34,6 +37,7 @@ interface RaceRoomState {
       isReady: boolean;
       carId: string;
       position?: { x: number; y: number; z: number };
+      rotation?: { x: number; y: number; z: number };
       speed?: number;
       checkpointsPassed?: number;
       hasFinished?: boolean;
@@ -54,6 +58,11 @@ interface GameProps {
 const Game = ({ room, onLeave }: GameProps) => {
   const [gameState, setGameState] = useState<RaceRoomState | null>(null);
   const [error, setError] = useState<string>('');
+  const [cameraMode, setCameraMode] = useState<'third-person' | 'first-person'>(
+    'third-person',
+  );
+  const [playerCars, setPlayerCars] = useState<Map<string, Car>>(new Map());
+  const [playerId, setPlayerId] = useState<string>('');
 
   useEffect(() => {
     if (!room) return;
@@ -62,6 +71,22 @@ const Game = ({ room, onLeave }: GameProps) => {
     room.onStateChange((state: RaceRoomState) => {
       console.log('Game state changed:', state);
       setGameState(state);
+
+      // Update player cars map
+      const carsMap = new Map<string, Car>();
+      for (const player of state.players.values()) {
+        const car = getCarById(player.carId);
+        if (car) {
+          carsMap.set(player.carId, car);
+        }
+      }
+      setPlayerCars(carsMap);
+
+      // Set player ID (first time only)
+      if (!playerId && state.players.size > 0) {
+        // Assuming the first player is the current player
+        setPlayerId(Array.from(state.players.keys())[0]);
+      }
     });
 
     room.onError((code: number, message?: string) => {
@@ -84,7 +109,14 @@ const Game = ({ room, onLeave }: GameProps) => {
       // Clean up event listeners
       room.removeAllListeners();
     };
-  }, [room, onLeave]);
+  }, [room, onLeave, playerId]);
+
+  // Toggle camera mode
+  const toggleCameraMode = () => {
+    setCameraMode((prev) =>
+      prev === 'third-person' ? 'first-person' : 'third-person',
+    );
+  };
 
   if (error) {
     return (
@@ -126,10 +158,31 @@ const Game = ({ room, onLeave }: GameProps) => {
 
       return (
         <div className="game-racing">
-          <h3>Race in Progress</h3>
-          <div className="race-time">Time: {(raceTime / 1000).toFixed(1)}s</div>
+          <div className="race-controls">
+            <button type="button" onClick={toggleCameraMode}>
+              Switch to{' '}
+              {cameraMode === 'third-person' ? 'First Person' : 'Third Person'}{' '}
+              View
+            </button>
+            <div className="race-time">
+              Time: {(raceTime / 1000).toFixed(1)}s
+            </div>
+          </div>
 
-          {/* Display player positions */}
+          {/* 3D Track Scene */}
+          <div
+            className="race-scene"
+            style={{ width: '100%', height: '500px' }}
+          >
+            <TrackScene
+              players={gameState.players}
+              currentPlayerId={playerId}
+              playerCars={playerCars}
+              cameraMode={cameraMode}
+            />
+          </div>
+
+          {/* Player status information */}
           <div className="player-positions">
             {Array.from(gameState.players.entries()).map(([id, player]) => (
               <div key={id} className="player-position">
