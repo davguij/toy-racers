@@ -4,6 +4,18 @@ import type { Client } from 'colyseus';
 import { PhysicsManager } from '../../physics/PhysicsManager';
 import { Player, RaceRoomState } from '../state/RaceRoomState';
 
+// Types for physics state
+interface CarState {
+  position: { x: number; y: number; z: number };
+  speed: number;
+  checkpointsPassed: number;
+}
+
+interface PhysicsUpdateResult {
+  raceTime: number;
+  carStates: Map<string, CarState>;
+}
+
 const PHYSICS_UPDATE_INTERVAL_MS = 16; // ~60Hz
 
 /**
@@ -190,10 +202,24 @@ export class RaceRoom extends Room<RaceRoomState> {
    */
   private updatePhysics() {
     // Update physics state
-    const { raceTime } = this.physicsManager.update();
+    const { raceTime, carStates } =
+      this.physicsManager.update() as PhysicsUpdateResult;
 
     // Update race time in state
     this.state.currentTime = raceTime;
+
+    // Log race progress (every second to avoid console spam)
+    if (raceTime % 1000 < PHYSICS_UPDATE_INTERVAL_MS) {
+      console.log(`🏎️ Race progress at ${raceTime}ms:`);
+      carStates.forEach((state: CarState, playerId: string) => {
+        console.log(
+          `  - ${playerId}: Position (${state.position.x.toFixed(2)}, ${state.position.z.toFixed(2)}), Speed: ${state.speed.toFixed(2)}m/s`,
+        );
+        if (state.checkpointsPassed > 0) {
+          console.log(`    Checkpoints passed: ${state.checkpointsPassed}`);
+        }
+      });
+    }
 
     // Check if race is finished
     if (this.physicsManager.isRaceFinished()) {

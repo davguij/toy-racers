@@ -23,6 +23,14 @@ The tooling for "Toy Racers" is chosen to streamline development, ensure code qu
 - **TypeScript**: Ensures type safety in the back-end, with a `tsconfig.json` configured for Node.js and CommonJS.
 - **Nodemon**: Restarts the server automatically during development, configured via `nodemon.json`.
 
+## Shared Module Tools
+- **TypeScript**: Used for type definitions and shared utilities across frontend and backend.
+- **Dual Module Compilation**: Outputs both CommonJS (for Node.js/backend) and ESM (for browser/frontend) formats to ensure cross-environment compatibility:
+  - `tsconfig.base.json`: Base TypeScript configuration
+  - `tsconfig.cjs.json`: CommonJS-specific configuration
+  - `tsconfig.esm.json`: ESM-specific configuration
+  - Package exports are configured in `package.json` to provide the correct module format depending on the environment
+
 ## Code Quality
 - **ESLint**: Enforces coding standards and identifies errors in JavaScript/TypeScript code, configured for both front-end and back-end.
 - **Prettier**: Maintains consistent code formatting across the project.
@@ -38,7 +46,7 @@ The tooling for "Toy Racers" is chosen to streamline development, ensure code qu
 
 ## Deployment and CI/CD
 - **Railway**: Deploys the full-stack application (front-end, back-end, database), supporting long-running multiplayer processes.
-- **GitHub Actions** or **Railway’s CI/CD**: Automates testing, building, and deployment for reliable code updates.
+- **GitHub Actions** or **Railway's CI/CD**: Automates testing, building, and deployment for reliable code updates.
 
 ## Version Control
 - **Git**: Tracks code changes and supports team collaboration.

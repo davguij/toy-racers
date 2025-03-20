@@ -38,9 +38,17 @@ toy-racers/
 ├── shared/                  # Shared utilities and types (TypeScript)
 │   ├── src/                 # Source code for shared utilities and types
 │   │   ├── types/           # Shared TypeScript types or interfaces
-│   │   └── utils/           # Shared utility functions (e.g., constants, helpers)
+│   │   ├── constants/       # Shared constants (e.g., game parameters)
+│   │   └── utils/           # Shared utility functions (e.g., helpers)
+│   ├── dist/                # Compiled output (both ESM and CommonJS formats)
+│   │   ├── cjs/             # CommonJS format (for Node.js/backend)
+│   │   ├── esm/             # ESM format (for browser/frontend)
+│   │   └── types/           # TypeScript declaration files
 │   ├── tests/               # Unit tests for shared code
-│   ├── tsconfig.json        # TypeScript configuration for the shared package
+│   ├── tsconfig.base.json   # Base TypeScript configuration for the shared package
+│   ├── tsconfig.cjs.json    # TypeScript configuration for CommonJS output
+│   ├── tsconfig.esm.json    # TypeScript configuration for ESM output
+│   ├── tsconfig.json        # Main TypeScript configuration extending the base
 │   └── package.json         # Shared package dependencies and scripts
 ├── docs/                    # Documentation (e.g., tech stack, architecture)
 │   ├── tech-stack.md        # Tech stack documentation
@@ -60,7 +68,7 @@ toy-racers/
 ## Key Directories Explained
 - **frontend/**: Contains all front-end code, utilizing React for UI components and Babylon.js for 3D rendering. The `src/` directory is modularized into `components/`, `scenes/`, `hooks/`, and more for clarity and reusability.
 - **backend/**: Houses server-side code, with distinct subdirectories for API routes (`api/`), multiplayer game logic (`game/`), physics simulations (`physics/`), and database models (`models/`), ensuring separation of concerns.
-- **shared/**: Provides reusable TypeScript types and utilities accessible to both front-end and back-end, minimizing redundancy.
+- **shared/**: Provides reusable TypeScript types and utilities accessible to both front-end and back-end, minimizing redundancy. The package outputs both CommonJS (for Node.js/backend) and ESM (for browser/frontend) formats to ensure compatibility across environments.
 - **docs/**: Stores project documentation, such as the tech stack and architecture, to onboard developers efficiently.
 - **tests/**: Dedicated to end-to-end testing (e.g., Cypress), validating the integrated application experience.
 - **Root Files**: Includes configuration files like `pnpm-workspace.yaml` and `turbo.json` to define the monorepo setup and automate tasks.

@@ -33,6 +33,7 @@ export class Player extends Schema {
   @type('boolean') isOffTrack = false;
   @type('boolean') hasFinished = false;
   @type('number') finishTime = 0;
+  @type('number') checkpointsPassed = 0;
 
   constructor(id = '', name = '', isReady = false, carId = '') {
     super();

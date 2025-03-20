@@ -1,6 +1,7 @@
 import { getAllCars } from '@toy-racers/shared';
 import { useCallback, useEffect, useState } from 'react';
 import client from '../utils/colyseusClient';
+import Game from './Game';
 
 // Type for RaceRoomState (simplified version of what's on the server)
 interface RaceRoomState {
@@ -11,9 +12,24 @@ interface RaceRoomState {
       name: string;
       isReady: boolean;
       carId: string;
+      transform?: {
+        x: number;
+        y: number;
+        z: number;
+        qx: number;
+        qy: number;
+        qz: number;
+        qw: number;
+      };
+      isOffTrack?: boolean;
+      hasFinished?: boolean;
+      finishTime?: number;
+      checkpointsPassed?: number;
     }
   >;
   status: 'waiting' | 'ready' | 'racing' | 'finished';
+  currentTime: number;
+  raceStartTime: number;
 }
 
 // Type for room to avoid using any
@@ -21,6 +37,9 @@ interface GameRoom {
   id: string;
   onStateChange: (callback: (state: RaceRoomState) => void) => void;
   onLeave: (callback: (code: number) => void) => void;
+  onError: (callback: (code: number, message?: string) => void) => void;
+  onMessage: <T>(type: string, callback: (message: T) => void) => void;
+  removeAllListeners: () => void;
   leave: () => Promise<void>;
   send: (type: string, message?: unknown) => void;
 }
@@ -186,6 +205,15 @@ const Lobby = () => {
     }
   }, [room, selectedCarId, availableCars, selectCar, setPlayerReady]);
 
+  // If the room is ready or racing, show the Game component
+  if (
+    roomState?.status === 'ready' ||
+    roomState?.status === 'racing' ||
+    roomState?.status === 'finished'
+  ) {
+    return room ? <Game room={room} onLeave={leaveRoom} /> : null;
+  }
+
   return (
     <div className="lobby">
       <h2>Race Lobby</h2>
@@ -282,7 +310,7 @@ const Lobby = () => {
             </div>
           )}
 
-          {isReady && (
+          {isReady && roomState?.status === 'waiting' && (
             <div className="waiting">
               <h4>Waiting for other player to get ready...</h4>
               <div>Status: {roomState?.status || 'waiting'}</div>
