@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Package manager
+
+- This project uses pnpm in a monorepo setup.
+- Whenever there's a need to install any dependency, or to run any script, use `pnpm` command instead of `npm`.
+- Commands should be executed from the project root folder, including a `--filter` argument if necessary.

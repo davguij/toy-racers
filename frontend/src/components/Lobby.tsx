@@ -4,6 +4,16 @@ import client from '../utils/colyseusClient';
 import Game from './Game';
 
 // Type for RaceRoomState (simplified version of what's on the server)
+interface Transform {
+  x: number;
+  y: number;
+  z: number;
+  qx: number;
+  qy: number;
+  qz: number;
+  qw: number;
+}
+
 interface RaceRoomState {
   players: Map<
     string,
@@ -12,19 +22,11 @@ interface RaceRoomState {
       name: string;
       isReady: boolean;
       carId: string;
-      transform?: {
-        x: number;
-        y: number;
-        z: number;
-        qx: number;
-        qy: number;
-        qz: number;
-        qw: number;
-      };
-      isOffTrack?: boolean;
-      hasFinished?: boolean;
-      finishTime?: number;
-      checkpointsPassed?: number;
+      transform: Transform;
+      isOffTrack: boolean;
+      hasFinished: boolean;
+      finishTime: number;
+      checkpointsPassed: number;
     }
   >;
   status: 'waiting' | 'ready' | 'racing' | 'finished';
@@ -35,6 +37,7 @@ interface RaceRoomState {
 // Type for room to avoid using any
 interface GameRoom {
   id: string;
+  roomId: string;
   onStateChange: (callback: (state: RaceRoomState) => void) => void;
   onLeave: (callback: (code: number) => void) => void;
   onError: (callback: (code: number, message?: string) => void) => void;
@@ -89,13 +92,13 @@ const Lobby = () => {
 
       // Update state
       setJoinedRoom(true);
-      setCurrentRoomId(newRoom.id);
+      setCurrentRoomId(newRoom.roomId);
       setRoom(newRoom);
 
       // Set up room event listeners
       setupRoomListeners(newRoom);
 
-      console.log(`Created and joined room: ${newRoom.id}`);
+      console.log(`Created and joined room: ${newRoom.roomId}`);
     } catch (error) {
       console.error('Failed to create room:', error);
       setErrorMessage('Failed to create room. Please try again.');
@@ -120,13 +123,13 @@ const Lobby = () => {
 
       // Update state
       setJoinedRoom(true);
-      setCurrentRoomId(newRoom.id);
+      setCurrentRoomId(newRoom.roomId);
       setRoom(newRoom);
 
       // Set up room event listeners
       setupRoomListeners(newRoom);
 
-      console.log(`Joined room: ${newRoom.id}`);
+      console.log(`Joined room: ${newRoom.roomId}`);
     } catch (error) {
       console.error('Failed to join room:', error);
       setErrorMessage(
@@ -147,7 +150,7 @@ const Lobby = () => {
 
     // When connection is closed
     gameRoom.onLeave((code: number) => {
-      console.log(`Left room ${gameRoom.id} with code ${code}`);
+      console.log(`Left room ${gameRoom.roomId} with code ${code}`);
       setJoinedRoom(false);
       setCurrentRoomId('');
       setRoom(null);
@@ -195,10 +198,10 @@ const Lobby = () => {
       const timer = setTimeout(() => {
         selectCar(availableCars[0].id);
 
-        // Set ready after another brief delay
+        // Set ready after a longer delay to ensure the room state has time to update
         setTimeout(() => {
           setPlayerReady();
-        }, 500);
+        }, 1500);
       }, 1000);
 
       return () => clearTimeout(timer);

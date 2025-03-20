@@ -15,7 +15,7 @@
 		"@babylonjs/core": "^7.54.0",
 		"@babylonjs/loaders": "^7.54.0",
 		"@toy-racers/shared": "workspace:*",
-		"colyseus.js": "^0.15.17",
+		"colyseus.js": "^0.16.3",
 		"react": "^18.2.0",
 		"react-babylonjs": "^3.1.27",
 		"react-dom": "^18.2.0"

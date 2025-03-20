@@ -18,6 +18,7 @@ interface RaceFinishedMessage {
 // Type for GameRoom (matching the type in Lobby)
 interface GameRoom {
   id: string;
+  roomId: string;
   onStateChange: (callback: (state: RaceRoomState) => void) => void;
   onLeave: (callback: (code: number) => void) => void;
   onError: (callback: (code: number, message?: string) => void) => void;
@@ -28,6 +29,16 @@ interface GameRoom {
 }
 
 // Type for RaceRoomState (simplified version of what's on the server)
+interface Transform {
+  x: number;
+  y: number;
+  z: number;
+  qx: number;
+  qy: number;
+  qz: number;
+  qw: number;
+}
+
 interface RaceRoomState {
   players: Map<
     string,
@@ -36,13 +47,11 @@ interface RaceRoomState {
       name: string;
       isReady: boolean;
       carId: string;
-      position?: { x: number; y: number; z: number };
-      rotation?: { x: number; y: number; z: number };
-      speed?: number;
-      checkpointsPassed?: number;
-      hasFinished?: boolean;
-      isOffTrack?: boolean;
-      finishTime?: number;
+      transform: Transform;
+      isOffTrack: boolean;
+      hasFinished: boolean;
+      finishTime: number;
+      checkpointsPassed: number;
     }
   >;
   status: 'waiting' | 'ready' | 'racing' | 'finished';
@@ -63,6 +72,11 @@ const Game = ({ room, onLeave }: GameProps) => {
   );
   const [playerCars, setPlayerCars] = useState<Map<string, Car>>(new Map());
   const [playerId, setPlayerId] = useState<string>('');
+
+  // Copy room ID to clipboard
+  const copyRoomId = () => {
+    navigator.clipboard.writeText(room.roomId);
+  };
 
   useEffect(() => {
     if (!room) return;
@@ -141,6 +155,18 @@ const Game = ({ room, onLeave }: GameProps) => {
         <div className="game-waiting">
           <h3>Waiting for Players</h3>
           <p>Players need to get ready to start the race.</p>
+          <div className="room-info">
+            <p>
+              Room ID: <span className="room-id">{room.roomId}</span>
+              <button
+                type="button"
+                onClick={copyRoomId}
+                className="copy-button"
+              >
+                Copy
+              </button>
+            </p>
+          </div>
         </div>
       );
 
@@ -149,6 +175,18 @@ const Game = ({ room, onLeave }: GameProps) => {
         <div className="game-ready">
           <h3>Get Ready!</h3>
           <p>Race will start soon...</p>
+          <div className="room-info">
+            <p>
+              Room ID: <span className="room-id">{room.roomId}</span>
+              <button
+                type="button"
+                onClick={copyRoomId}
+                className="copy-button"
+              >
+                Copy
+              </button>
+            </p>
+          </div>
         </div>
       );
 
@@ -166,6 +204,18 @@ const Game = ({ room, onLeave }: GameProps) => {
             </button>
             <div className="race-time">
               Time: {(raceTime / 1000).toFixed(1)}s
+            </div>
+            <div className="room-info">
+              <p>
+                Room ID: <span className="room-id">{room.roomId}</span>
+                <button
+                  type="button"
+                  onClick={copyRoomId}
+                  className="copy-button"
+                >
+                  Copy
+                </button>
+              </p>
             </div>
           </div>
 
@@ -187,13 +237,19 @@ const Game = ({ room, onLeave }: GameProps) => {
             {Array.from(gameState.players.entries()).map(([id, player]) => (
               <div key={id} className="player-position">
                 <h4>{player.name}</h4>
-                {player.position && (
+                {player.transform && (
                   <>
                     <div>
-                      Position: ({player.position.x.toFixed(1)},{' '}
-                      {player.position.z.toFixed(1)})
+                      Position: ({player.transform.x.toFixed(1)},{' '}
+                      {player.transform.z.toFixed(1)})
                     </div>
-                    <div>Speed: {player.speed?.toFixed(1)} m/s</div>
+                    <div>
+                      Speed:{' '}
+                      {Math.sqrt(
+                        player.transform.x ** 2 + player.transform.z ** 2,
+                      ).toFixed(1)}{' '}
+                      m/s
+                    </div>
                     {player.checkpointsPassed && (
                       <div>Checkpoints: {player.checkpointsPassed}</div>
                     )}
@@ -233,6 +289,18 @@ const Game = ({ room, onLeave }: GameProps) => {
                   )}
                 </div>
               ))}
+          </div>
+          <div className="room-info">
+            <p>
+              Room ID: <span className="room-id">{room.roomId}</span>
+              <button
+                type="button"
+                onClick={copyRoomId}
+                className="copy-button"
+              >
+                Copy
+              </button>
+            </p>
           </div>
           <button type="button" onClick={onLeave}>
             Leave Game
