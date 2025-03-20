@@ -19,15 +19,15 @@
 
 ## Phase 2: Race Simulation Basics
 
-### Step 4: Add Basic Physics to the Race Room
-- **User Story**: As a player, I need the server to simulate a basic race so that I can see cars move on a track.
-- **Task**: In the back-end race room, set up a simple physics simulation with a sloped track and two car objects that move downhill due to gravity, broadcasting their positions to clients.
-- **Test**: Join the room with two clients and manually verify that the server logs show the cars’ positions changing as they move down the slope.
+### Step 4: Add Advanced Physics to the Race Room
+- **User Story**: As a player, I need the server to simulate a realistic race so that I can see cars move on a track with accurate physics.
+- **Task**: In the back-end race room, set up an advanced physics simulation with a sloped track and two car objects that move downhill due to gravity, incorporating collisions between cars, friction differences based on car attributes, and other physics effects. Broadcast positions and orientations to clients.
+- **Test**: Join the room with two clients and manually verify that the server logs show the cars' positions changing as they move down the slope, with realistic physics interactions.
 
 ### Step 5: Render the Race in the Front-End
 - **User Story**: As a player, I need to see the race happen in 3D so that I can watch my car compete.
 - **Task**: In the front-end, create a race scene component that renders a sloped track and two car objects, updating their positions based on server updates.
-- **Test**: Connect two clients to a room, start the race, and manually verify that both clients display the cars moving down the slope in sync with the server’s updates.
+- **Test**: Connect two clients to a room, start the race, and manually verify that both clients display the cars moving down the slope in sync with the server's updates.
 
 ## Phase 3: Car Selection and Race Logic
 
@@ -52,12 +52,18 @@
 
 ### Step 9: Add Camera Switching During the Race
 - **User Story**: As a player, I need to switch between camera views so that I can enjoy watching the race from different angles.
-- **Task**: In the front-end race scene, add controls to toggle between a third-person view (behind the player’s car) and a first-person view (on the car), identifying the player’s car by their room position.
+- **Task**: In the front-end race scene, add controls to toggle between a third-person view (behind the player's car) and a first-person view (on the car), identifying the player's car by their room position.
 - **Test**: During a race, use the controls in one client to switch views and verify that the camera follows the correct car in both third-person and first-person perspectives.
 
-## Phase 6: Authentication (Deferred to Later Stages)
+## Phase 6: Authentication (Final MVP Step)
 
 ### Step 10: Integrate Basic Authentication
 - **User Story**: As a player, I need to log in to play the game so that my identity is secure and tied to my races.
 - **Task**: In the front-end, add login and signup screens using Clerk; in the back-end, require a valid authentication token to join rooms or access features.
 - **Test**: Attempt to join a room without logging in (should fail), then log in with two clients and verify both can join a room successfully.
+
+**Notes**:
+- No specific deadlines or dependencies are defined for the implementation phases.
+- Car data will remain hardcoded for the MVP, with no immediate need for database storage.
+- Testing will be performed manually for each feature without automated tests.
+- UI design will be developed iteratively during implementation without pre-existing design resources.
