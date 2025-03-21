@@ -183,7 +183,11 @@ export class RaceRoom extends Room<RaceRoomState> {
       - Max clients: ${this.maxClients}`);
 
     // Start race if all players are ready and we have max players
-    if (allPlayersReady && this.state.players.size === this.maxClients) {
+    if (
+      allPlayersReady &&
+      this.state.players.size === this.maxClients &&
+      this.state.status === 'ready'
+    ) {
       console.log('🎯 All conditions met for race start, initiating race...');
       this.startRace();
     } else {
