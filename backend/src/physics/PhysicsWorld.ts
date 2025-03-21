@@ -103,6 +103,17 @@ export class PhysicsWorld {
     );
   }
 
+  private getTrackTopHeight(x: number): number {
+    const halfTrackThickness = 0.025; // Track thickness is 0.05
+    const sinTheta = Math.sin(TRACK_SLOPE);
+    const cosTheta = Math.cos(TRACK_SLOPE);
+    const tanTheta = Math.tan(TRACK_SLOPE);
+    return (
+      -(x - halfTrackThickness * sinTheta) * tanTheta +
+      halfTrackThickness * cosTheta
+    );
+  }
+
   /**
    * Create a simple straight plastic track with a slope
    */
@@ -236,10 +247,11 @@ export class PhysicsWorld {
     carBody.addShape(shape);
 
     // Position on sloped track
-    const x = -TRACK_LENGTH / 2 + 0.5; // -4.5
-    const trackY = -x * Math.sin(TRACK_SLOPE) + 0.025;
-    const carY = trackY + dimensions.height / 2 + 0.01; // 1 cm above
-    carBody.position.set(-4.5, 1.35, 0.08);
+    const x = -TRACK_LENGTH / 2 + 0.5; // e.g., -4.5
+    const y_top = this.getTrackTopHeight(x);
+    const halfHeight = dimensions.height / 2;
+    const carY = y_top + halfHeight + 0.001;
+    carBody.position.set(x, carY, 0); // z set later as ±0.08
 
     carBody.allowSleep = false;
     carBody.sleepSpeedLimit = 0.1;
@@ -267,18 +279,15 @@ export class PhysicsWorld {
     const pos = carBody.position;
     const TRACK_SLOPE = 0.2914567944778671; // From logs, in radians
 
-    // Calculate the track's height at the car's x-position
-    const trackHeight = -pos.x * Math.sin(TRACK_SLOPE);
-
     // Define a tolerance for how far above or below the track the car can be
     const heightTolerance = 0.1; // e.g., 10 cm leeway
-    const isOffHeight =
-      pos.y < trackHeight - heightTolerance ||
-      pos.y > trackHeight + heightTolerance;
 
     // Lateral and longitudinal checks remain unchanged
     const TRACK_WIDTH = 0.3;
     const TRACK_LENGTH = 10;
+
+    const trackHeight = this.getTrackTopHeight(pos.x);
+    const isOffHeight = pos.y < trackHeight - heightTolerance;
     const isOffLateral = Math.abs(pos.z) > TRACK_WIDTH / 2 + 0.05;
     const isOffLongitudinal =
       pos.x < -TRACK_LENGTH / 2 - 0.5 || pos.x > TRACK_LENGTH / 2 + 0.5;
