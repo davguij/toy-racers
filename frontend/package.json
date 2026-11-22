@@ -10,7 +10,7 @@
 	},
 	"keywords": [],
 	"author": "",
-	"license": "ISC",
+	"license": "MIT",
 	"dependencies": {
 		"@babylonjs/core": "^7.54.0",
 		"@babylonjs/loaders": "^7.54.0",

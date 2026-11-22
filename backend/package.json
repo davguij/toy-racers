@@ -10,7 +10,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@colyseus/schema": "^3.0.24",
     "@toy-racers/shared": "workspace:*",
